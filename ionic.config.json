@@ -1,0 +1,8 @@
+{
+  "name": "InfiniteCloud website",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "d26c44ad"
+}

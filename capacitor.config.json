@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "InfiniteCloud website",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
