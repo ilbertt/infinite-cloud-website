@@ -5,6 +5,39 @@ const express = require("express");
 const cors = require("cors");
 const Telegraf = require("telegraf");
 
+const mapFiles = (files, formattedFileSys, path) => {
+  if (files.length === 0) {
+    const emptyFile = {
+      key: path + "/",
+    };
+    formattedFileSys.push(emptyFile);
+    return;
+  }
+  for (const file of files) {
+    const newFile = {
+      key: path + "/" + file.name,
+      modified: file.createdAt,
+      size: 1 * 1024 ** 2,
+      messageId: file.messageId,
+    };
+    formattedFileSys.push(newFile);
+  }
+};
+
+const formatFileSys = (fileSystem, formattedFileSys, path) => {
+  for (const dir in fileSystem) {
+    if (dir === ".") {
+      mapFiles(fileSystem[dir], formattedFileSys, path);
+    } else {
+      formatFileSys(
+          fileSystem[dir],
+          formattedFileSys,
+          path + "/" + dir,
+      );
+    }
+  }
+};
+
 const bot = new Telegraf.Telegraf(functions.config().telegram.token);
 
 const app = express();
@@ -22,9 +55,23 @@ app.get("/getFilesystem", async (req, res) => {
 
   request.get(downloadUrl.href, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      res.send(JSON.parse(body));
+      const fileSystem = JSON.parse(body);
+      const formattedFileSys = [];
+      formatFileSys(fileSystem["/"], formattedFileSys, "");
+      console.log(formattedFileSys);
+      res.send({data: formattedFileSys});
     }
   });
+});
+app.post("/downloadFile", async (req, res) => {
+  const userId = req.body.userId;
+  const messageId = req.body.messageId;
+  bot.telegram.sendMessage(userId,
+      `Requested file at \`${new Date().toISOString()}\` from website.`,
+      {
+        reply_to_message_id: messageId,
+        parse_mode: "Markdown",
+      });
 });
 
 exports.api = functions.https.onRequest(app);
