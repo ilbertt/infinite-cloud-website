@@ -8,7 +8,7 @@ const initialState: AuthState = {
     status: 'loading',
 };
 
-export const loadUserData = createAsyncThunk('activist/loadUserData', async () => {
+export const loadUserData = createAsyncThunk('auth/loadUserData', async () => {
     const userData = await storage.getObject<UserModel>('user-data');
     return userData;
 });
@@ -19,17 +19,13 @@ export const storeUserData = createAsyncThunk('auth/storeUserData', async (userD
 });
 
 export const removeUserData = createAsyncThunk('auth/removeUserData', async () => {
-    await storage.remove('user-data');
+    return await storage.remove('user-data');
 });
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        // setAskedRequest(state, action) {
-        //     state.askedRequest = action.payload;
-        // }
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
             .addCase(loadUserData.pending, (state, action) => {
@@ -41,6 +37,9 @@ const authSlice = createSlice({
             })
             .addCase(storeUserData.fulfilled, (state, action) => {
                 state.user = action.payload;
+            })
+            .addCase(removeUserData.fulfilled, (state, action) => {
+                state.user = null;
             })
     }
 });

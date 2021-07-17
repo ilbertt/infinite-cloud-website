@@ -1,5 +1,21 @@
 .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 40%;
+    transform: translateY(-40%);
+}
+
+.title {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.bot-link {
+    text-decoration: none;
+}
+
+.tg-login-container {
+    margin-top: 20px;
 }
