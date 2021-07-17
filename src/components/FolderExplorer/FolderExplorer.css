@@ -1,0 +1,10 @@
+.explorer-container {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.explorer-icon {
+    margin-right: 5px;
+    vertical-align: middle;
+}

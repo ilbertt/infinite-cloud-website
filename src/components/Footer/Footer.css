@@ -1,0 +1,25 @@
+.footer-toolbar {
+    text-align: center;
+}
+
+.footer-element {
+    display: inline-block;
+}
+
+.footer-element ion-text {
+    font-size: 14px;
+}
+
+.footer-icon {
+    vertical-align: text-top;
+    margin-right: 5px;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-divider {
+    margin: 0 20px;
+}
