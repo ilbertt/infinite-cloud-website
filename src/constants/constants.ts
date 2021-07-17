@@ -3,8 +3,9 @@ const isProduction = !(!process.env.NODE_ENV || process.env.NODE_ENV === 'develo
 const firebaseProjectId = 'infinitecloud-website-api';
 
 const functionsUrl = isProduction ?
-    `https://us-central1-${firebaseProjectId}.cloudfunctions.net/api` :
-    'http://localhost:5001/infinitecloud-website-api/us-central1/api';
+    `https://${firebaseProjectId}.web.app/v1`
+    :
+    'http://localhost:5001/infinitecloud-website-api/us-central1/api/v1';
 
 const appName = 'Infinite Cloud';
 const botUsername = 'infinitecloud_bot';
