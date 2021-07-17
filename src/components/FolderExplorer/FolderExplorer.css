@@ -8,3 +8,9 @@
     margin-right: 5px;
     vertical-align: middle;
 }
+
+.status-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+}

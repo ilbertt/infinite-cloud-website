@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import FileBrowser, { FileBrowserFile } from 'react-keyed-file-browser';
 import { IonButton, IonIcon, IonItem, IonLabel, IonSpinner, useIonToast } from "@ionic/react";
-import { closeCircleOutline, cloudDownload, document, documentText, folder, folderOpen, folderOpenOutline, folderOutline, image } from "ionicons/icons";
+import { closeCircleOutline, cloudDownload, document, documentText, folder, folderOpen, image } from "ionicons/icons";
 
 import constants from "../../constants/constants";
 import { UserModel } from "../../models/auth.model";
@@ -16,6 +16,7 @@ type Props = {
 const FolderExplorer = ({ user }: Props) => {
     const [filesystem, setFilesystem] = useState<FileModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
     const [present, dismiss] = useIonToast();
 
     const downloadFileHandler = async (messageId: number | undefined) => {
@@ -43,17 +44,40 @@ const FolderExplorer = ({ user }: Props) => {
 
     const getFilesystem = useCallback(async () => {
         setIsLoading(true);
-        const res = await fetch(`${constants.functionsUrl}/getFilesystem?userId=` + user.id);
-        setFilesystem((await res.json()).data);
+        try {
+            const res = await fetch(`${constants.functionsUrl}/getFilesystem?userId=` + user.id);
+            console.log(res);
+            if (res.status === 200) {
+                setFilesystem((await res.json()).data);
+            } else {
+                throw new Error(res.statusText);
+            }
+        } catch (err) {
+            setError(err.message);
+        }
         setIsLoading(false);
     }, [user]);
-    
+
     useEffect(() => {
         getFilesystem();
     }, [getFilesystem]);
 
     if (isLoading) {
-        return <IonSpinner />
+        return (
+            <div className="status-message">
+                <h2>Fetching your filesystem</h2>
+                <IonSpinner />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="status-message">
+                <h2>There was an error</h2>
+                <p>{error}</p>
+            </div>
+        );
     }
 
     return (
