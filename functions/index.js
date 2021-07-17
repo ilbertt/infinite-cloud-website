@@ -51,7 +51,7 @@ app.get("/getFilesystem", async (req, res) => {
   const fileId = chat.pinned_message.document.file_id;
   const downloadUrl = await bot.telegram.getFileLink(fileId);
 
-  console.log("DOWNLOAD URL", downloadUrl.href);
+  // console.log("DOWNLOAD URL", downloadUrl.href);
 
   request.get(downloadUrl.href, (error, response, body) => {
     if (!error && response.statusCode == 200) {
@@ -72,6 +72,7 @@ app.post("/downloadFile", async (req, res) => {
         reply_to_message_id: messageId,
         parse_mode: "Markdown",
       });
+  res.sendStatus(200);
 });
 
 exports.api = functions.https.onRequest(app);
