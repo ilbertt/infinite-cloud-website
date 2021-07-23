@@ -3,7 +3,7 @@ const functions = require("firebase-functions");
 const request = require("request");
 const express = require("express");
 const cors = require("cors");
-const Telegraf = require("telegraf");
+const {infiniteCloudBot, setBotToken} = require("infinitecloud_bot");
 
 const mapFiles = (files, formattedFileSys, path) => {
   if (files.length === 0) {
@@ -38,7 +38,9 @@ const formatFileSys = (fileSystem, formattedFileSys, path) => {
   }
 };
 
-const bot = new Telegraf.Telegraf(functions.config().telegram.token);
+setBotToken(functions.config().telegram.token);
+// infiniteCloudBot.telegram.webhookReply = true;
+// infiniteCloudBot.launch();
 
 const app = express();
 
@@ -49,9 +51,9 @@ app.get("/v1/getFilesystem", async (req, res) => {
   console.log("handling GETFILESYSTEM request");
   try {
     const userId = req.query.userId;
-    const chat = await bot.telegram.getChat(userId);
+    const chat = await infiniteCloudBot.telegram.getChat(userId);
     const fileId = chat.pinned_message.document.file_id;
-    const downloadUrl = await bot.telegram.getFileLink(fileId);
+    const downloadUrl = await infiniteCloudBot.telegram.getFileLink(fileId);
 
     // console.log("DOWNLOAD URL", downloadUrl.href);
 
@@ -75,7 +77,7 @@ app.post("/v1/downloadFile", async (req, res) => {
   try {
     const userId = req.body.userId;
     const messageId = req.body.messageId;
-    await bot.telegram.sendMessage(userId,
+    await infiniteCloudBot.telegram.sendMessage(userId,
         `Requested file.\nTime: \`${new Date().toISOString()}\`
         \nFrom: website.`,
         {
@@ -91,3 +93,11 @@ app.post("/v1/downloadFile", async (req, res) => {
 });
 
 exports.api = functions.https.onRequest(app);
+
+// exports.bot = functions.https.onRequest(async (req, res) => {
+//   return await infiniteCloudBot.handleUpdate(req.body, res).then((rv) => {
+//     // if it's not a request from the telegram,
+//     // rv will be undefined, but we should respond with 200
+//     return !rv && res.sendStatus(200);
+//   });
+// });
