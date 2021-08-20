@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import FileBrowser, { FileBrowserFile } from 'react-keyed-file-browser';
 import { IonButton, IonIcon, IonItem, IonLabel, IonSpinner, useIonToast } from "@ionic/react";
-import { closeCircleOutline, cloudDownload, document, documentText, folder, folderOpen, image } from "ionicons/icons";
+import { archive, calculator, closeCircleOutline, cloudDownload, document, documentOutline, documentText, easel, film, folder, folderOpen, image, musicalNotes, pencil, trash } from "ionicons/icons";
 
 import constants from "../../constants/constants";
 import { UserModel } from "../../models/auth.model";
@@ -89,7 +89,18 @@ const FolderExplorer = ({ user }: Props) => {
                     PDF: <IonIcon className="explorer-icon" icon={document} />,
                     Folder: <IonIcon className="explorer-icon" icon={folder} />,
                     FolderOpen: <IonIcon className="explorer-icon" icon={folderOpen} />,
-                    Word: <IonIcon className="explorer-icon" icon={documentText} />
+                    Word: <IonIcon className="explorer-icon" icon={documentText} />,
+                    Delete: <IonIcon className="explorer-icon" icon={trash} />,
+                    Download: <IonIcon className="explorer-icon" icon={cloudDownload} />,
+                    Audio: <IonIcon className="explorer-icon" icon={musicalNotes} />,
+                    Archive: <IonIcon className="explorer-icon" icon={archive} />,
+                    Text: <IonIcon className="explorer-icon" icon={documentText} />,
+                    File: <IonIcon className="explorer-icon" icon={documentOutline} />,
+                    Video: <IonIcon className="explorer-icon" icon={film} />,
+                    Excel: <IonIcon className="explorer-icon" icon={calculator} />,
+                    PowerPoint: <IonIcon className="explorer-icon" icon={easel} />,
+                    Rename: <IonIcon className="explorer-icon" icon={pencil} />,
+                    Loading: <IonSpinner />,
                 }}
                 renderStyle='table'
                 noFilesMessage='This folder is empty'
